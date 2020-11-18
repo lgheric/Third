@@ -1,103 +1,106 @@
 package com.eric.third;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,
+        ViewPager.OnPageChangeListener{
 
 
-    //Activity UI Object
-    private LinearLayout ly_tab_menu_channel;
-    private TextView tab_menu_channel;
-    private TextView tab_menu_channel_num;
-    private LinearLayout ly_tab_menu_message;
-    private TextView tab_menu_message;
-    private TextView tab_menu_message_num;
-    private LinearLayout ly_tab_menu_better;
-    private TextView tab_menu_better;
-    private TextView tab_menu_better_num;
-    private LinearLayout ly_tab_menu_setting;
-    private TextView tab_menu_setting;
-    private ImageView tab_menu_setting_partner;
-    private FragmentManager fManager;
-    private FragmentTransaction fTransaction;
-    private MyFragment fg1;
+    //UI Objects
+    private TextView txt_topbar;
+    private RadioGroup rg_tab_bar;
+    private RadioButton rb_channel;
+    private RadioButton rb_message;
+    private RadioButton rb_better;
+    private RadioButton rb_setting;
+    private ViewPager vpager;
+
+    private MyFragmentPagerAdapter mAdapter;
+
+    //几个代表页面的常量
+    public static final int PAGE_ONE = 0;
+    public static final int PAGE_TWO = 1;
+    public static final int PAGE_THREE = 2;
+    public static final int PAGE_FOUR = 3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
 
-        bindViews();
-        ly_tab_menu_channel.performClick();
-        fg1 = new MyFragment();
-        fManager = getSupportFragmentManager();
-        fTransaction = fManager.beginTransaction();
-        fTransaction.add(R.id.ly_content, fg1).commit();
+            mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+            bindViews();
+            rb_channel.setChecked(true);
     }
 
     private void bindViews() {
-        ly_tab_menu_channel = findViewById(R.id.ly_tab_menu_channel);
-        tab_menu_channel = findViewById(R.id.tab_menu_channel);
-        tab_menu_channel_num = findViewById(R.id.tab_menu_channel_num);
-        ly_tab_menu_message = findViewById(R.id.ly_tab_menu_message);
-        tab_menu_message = findViewById(R.id.tab_menu_message);
-        tab_menu_message_num = findViewById(R.id.tab_menu_message_num);
-        ly_tab_menu_better = findViewById(R.id.ly_tab_menu_better);
-        tab_menu_better = findViewById(R.id.tab_menu_better);
-        tab_menu_better_num = findViewById(R.id.tab_menu_better_num);
-        ly_tab_menu_setting = findViewById(R.id.ly_tab_menu_setting);
-        tab_menu_setting = findViewById(R.id.tab_menu_setting);
-        tab_menu_setting_partner = findViewById(R.id.tab_menu_setting_partner);
+            txt_topbar = findViewById(R.id.txt_topbar);
+            rg_tab_bar = findViewById(R.id.rg_tab_bar);
+            rb_channel = findViewById(R.id.rb_channel);
+            rb_message = findViewById(R.id.rb_message);
+            rb_better = findViewById(R.id.rb_better);
+            rb_setting = findViewById(R.id.rb_setting);
+            rg_tab_bar.setOnCheckedChangeListener(this);
 
-        ly_tab_menu_channel.setOnClickListener(this);
-        ly_tab_menu_message.setOnClickListener(this);
-        ly_tab_menu_better.setOnClickListener(this);
-        ly_tab_menu_setting.setOnClickListener(this);
-
+            vpager = findViewById(R.id.vpager);
+            vpager.setAdapter(mAdapter);
+            vpager.setCurrentItem(0);
+            vpager.addOnPageChangeListener(this);
     }
-
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.ly_tab_menu_channel:
-                setSelected();
-                tab_menu_channel.setSelected(true);
-                tab_menu_channel_num.setVisibility(View.INVISIBLE);
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+            switch (checkedId) {
+                case R.id.rb_channel:
+                    vpager.setCurrentItem(PAGE_ONE);
                 break;
-            case R.id.ly_tab_menu_message:
-                setSelected();
-                tab_menu_message.setSelected(true);
-                tab_menu_message_num.setVisibility(View.INVISIBLE);
+                case R.id.rb_message:
+                    vpager.setCurrentItem(PAGE_TWO);
                 break;
-            case R.id.ly_tab_menu_better:
-                setSelected();
-                tab_menu_better.setSelected(true);
-                tab_menu_better_num.setVisibility(View.INVISIBLE);
+                case R.id.rb_better:
+                    vpager.setCurrentItem(PAGE_THREE);
                 break;
-            case R.id.ly_tab_menu_setting:
-                setSelected();
-                tab_menu_setting.setSelected(true);
-                tab_menu_setting_partner.setVisibility(View.INVISIBLE);
+                case R.id.rb_setting:
+                    vpager.setCurrentItem(PAGE_FOUR);
                 break;
-        }
+            }
     }
 
-    //重置所有文本的选中状态
-    private void setSelected() {
-        tab_menu_channel.setSelected(false);
-        tab_menu_message.setSelected(false);
-        tab_menu_better.setSelected(false);
-        tab_menu_setting.setSelected(false);
+
+    //重写ViewPager页面切换的处理方法
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+            //state的状态有三个，0表示什么都没做，1正在滑动，2滑动完毕
+            if (state == 2) {
+                switch (vpager.getCurrentItem()) {
+                    case PAGE_ONE:
+                        rb_channel.setChecked(true);
+                    break;
+                    case PAGE_TWO:
+                        rb_message.setChecked(true);
+                    break;
+                    case PAGE_THREE:
+                        rb_better.setChecked(true);
+                    break;
+                    case PAGE_FOUR:
+                        rb_setting.setChecked(true);
+                    break;
+                }
+            }
     }
 }
