@@ -5,81 +5,99 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
 
-    private RadioGroup rg_tab_bar;
-    private RadioButton rb_channel;
-
-    //Fragment Object
-    private MyFragment fg1,fg2,fg3,fg4;
+    //Activity UI Object
+    private LinearLayout ly_tab_menu_channel;
+    private TextView tab_menu_channel;
+    private TextView tab_menu_channel_num;
+    private LinearLayout ly_tab_menu_message;
+    private TextView tab_menu_message;
+    private TextView tab_menu_message_num;
+    private LinearLayout ly_tab_menu_better;
+    private TextView tab_menu_better;
+    private TextView tab_menu_better_num;
+    private LinearLayout ly_tab_menu_setting;
+    private TextView tab_menu_setting;
+    private ImageView tab_menu_setting_partner;
     private FragmentManager fManager;
-
+    private FragmentTransaction fTransaction;
+    private MyFragment fg1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        bindViews();
+        ly_tab_menu_channel.performClick();
+        fg1 = new MyFragment();
         fManager = getSupportFragmentManager();
-        rg_tab_bar = findViewById(R.id.rg_tab_bar);
-        rg_tab_bar.setOnCheckedChangeListener(this);
-        //获取第一个单选按钮，并设置其为选中状态
-        rb_channel = findViewById(R.id.rb_channel);
-        rb_channel.setChecked(true);
+        fTransaction = fManager.beginTransaction();
+        fTransaction.add(R.id.ly_content, fg1).commit();
+    }
+
+    private void bindViews() {
+        ly_tab_menu_channel = findViewById(R.id.ly_tab_menu_channel);
+        tab_menu_channel = findViewById(R.id.tab_menu_channel);
+        tab_menu_channel_num = findViewById(R.id.tab_menu_channel_num);
+        ly_tab_menu_message = findViewById(R.id.ly_tab_menu_message);
+        tab_menu_message = findViewById(R.id.tab_menu_message);
+        tab_menu_message_num = findViewById(R.id.tab_menu_message_num);
+        ly_tab_menu_better = findViewById(R.id.ly_tab_menu_better);
+        tab_menu_better = findViewById(R.id.tab_menu_better);
+        tab_menu_better_num = findViewById(R.id.tab_menu_better_num);
+        ly_tab_menu_setting = findViewById(R.id.ly_tab_menu_setting);
+        tab_menu_setting = findViewById(R.id.tab_menu_setting);
+        tab_menu_setting_partner = findViewById(R.id.tab_menu_setting_partner);
+
+        ly_tab_menu_channel.setOnClickListener(this);
+        ly_tab_menu_message.setOnClickListener(this);
+        ly_tab_menu_better.setOnClickListener(this);
+        ly_tab_menu_setting.setOnClickListener(this);
+
     }
 
 
     @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        FragmentTransaction fTransaction = fManager.beginTransaction();
-        hideAllFragment(fTransaction);
-        switch (checkedId){
-            case R.id.rb_channel:
-                if(fg1 == null){
-                    fg1 = new MyFragment("第一个Fragment");
-                    fTransaction.add(R.id.ly_content,fg1);
-                }else{
-                    fTransaction.show(fg1);
-                }
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ly_tab_menu_channel:
+                setSelected();
+                tab_menu_channel.setSelected(true);
+                tab_menu_channel_num.setVisibility(View.INVISIBLE);
                 break;
-            case R.id.rb_message:
-                if(fg2 == null){
-                    fg2 = new MyFragment("第二个Fragment");
-                    fTransaction.add(R.id.ly_content,fg2);
-                }else{
-                    fTransaction.show(fg2);
-                }
+            case R.id.ly_tab_menu_message:
+                setSelected();
+                tab_menu_message.setSelected(true);
+                tab_menu_message_num.setVisibility(View.INVISIBLE);
                 break;
-            case R.id.rb_better:
-                if(fg3 == null){
-                    fg3 = new MyFragment("第三个Fragment");
-                    fTransaction.add(R.id.ly_content,fg3);
-                }else{
-                    fTransaction.show(fg3);
-                }
+            case R.id.ly_tab_menu_better:
+                setSelected();
+                tab_menu_better.setSelected(true);
+                tab_menu_better_num.setVisibility(View.INVISIBLE);
                 break;
-            case R.id.rb_setting:
-                if(fg4 == null){
-                    fg4 = new MyFragment("第四个Fragment");
-                    fTransaction.add(R.id.ly_content,fg4);
-                }else{
-                    fTransaction.show(fg4);
-                }
+            case R.id.ly_tab_menu_setting:
+                setSelected();
+                tab_menu_setting.setSelected(true);
+                tab_menu_setting_partner.setVisibility(View.INVISIBLE);
                 break;
         }
-        fTransaction.commit();
     }
 
-
-    //隐藏所有Fragment
-    private void hideAllFragment(FragmentTransaction fragmentTransaction){
-        if(fg1 != null)fragmentTransaction.hide(fg1);
-        if(fg2 != null)fragmentTransaction.hide(fg2);
-        if(fg3 != null)fragmentTransaction.hide(fg3);
-        if(fg4 != null)fragmentTransaction.hide(fg4);
+    //重置所有文本的选中状态
+    private void setSelected() {
+        tab_menu_channel.setSelected(false);
+        tab_menu_message.setSelected(false);
+        tab_menu_better.setSelected(false);
+        tab_menu_setting.setSelected(false);
     }
 }
