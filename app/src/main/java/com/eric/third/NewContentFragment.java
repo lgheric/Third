@@ -18,6 +18,7 @@ public class NewContentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fg_content, container, false);
         TextView txt_content =  view.findViewById(R.id.txt_content);
         //getArgument获取传递过来的Bundle对象
+        assert getArguments() != null;
         txt_content.setText(getArguments().getString("content"));
         return view;
     }

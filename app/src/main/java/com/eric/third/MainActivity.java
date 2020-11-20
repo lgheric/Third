@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -15,9 +14,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private TextView txt_title;
-    private FrameLayout fl_content;
-    private Context mContext;
-    private ArrayList<Data> datas = null;
     private FragmentManager fManager = null;
     private long exitTime = 0;
 
@@ -29,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             fManager = getSupportFragmentManager();
             bindViews();
 
-            datas = new ArrayList<>();
+        ArrayList<Data> datas = new ArrayList<>();
             for (int i = 1; i <= 20; i++) {
                 Data data = new Data("新闻标题" + i, i + "~新闻内容~~~~~~~~");
                 datas.add(data);
@@ -42,10 +38,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
-        txt_title = (TextView) findViewById(R.id.txt_title);
-        fl_content = (FrameLayout) findViewById(R.id.fl_content);
+        txt_title = findViewById(R.id.txt_title);
     }
-
 
     //点击回退键的处理：判断Fragment栈中是否有Fragment
     //没，双击退出程序，否则像是Toast提示
