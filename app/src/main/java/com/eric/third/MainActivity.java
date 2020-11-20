@@ -1,106 +1,67 @@
 package com.eric.third;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,
-        ViewPager.OnPageChangeListener{
+import java.util.ArrayList;
 
+public class MainActivity extends AppCompatActivity {
 
-    //UI Objects
-    private TextView txt_topbar;
-    private RadioGroup rg_tab_bar;
-    private RadioButton rb_channel;
-    private RadioButton rb_message;
-    private RadioButton rb_better;
-    private RadioButton rb_setting;
-    private ViewPager vpager;
-
-    private MyFragmentPagerAdapter mAdapter;
-
-    //几个代表页面的常量
-    public static final int PAGE_ONE = 0;
-    public static final int PAGE_TWO = 1;
-    public static final int PAGE_THREE = 2;
-    public static final int PAGE_FOUR = 3;
-
+    private TextView txt_title;
+    private FrameLayout fl_content;
+    private Context mContext;
+    private ArrayList<Data> datas = null;
+    private FragmentManager fManager = null;
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
-            mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+            fManager = getSupportFragmentManager();
             bindViews();
-            rb_channel.setChecked(true);
+
+            datas = new ArrayList<>();
+            for (int i = 1; i <= 20; i++) {
+                Data data = new Data("新闻标题" + i, i + "~新闻内容~~~~~~~~");
+                datas.add(data);
+            }
+            NewListFragment nlFragment = new NewListFragment(fManager, datas);
+            FragmentTransaction ft = fManager.beginTransaction();
+            ft.replace(R.id.fl_content, nlFragment);
+            ft.commit();
+
     }
 
     private void bindViews() {
-            txt_topbar = findViewById(R.id.txt_topbar);
-            rg_tab_bar = findViewById(R.id.rg_tab_bar);
-            rb_channel = findViewById(R.id.rb_channel);
-            rb_message = findViewById(R.id.rb_message);
-            rb_better = findViewById(R.id.rb_better);
-            rb_setting = findViewById(R.id.rb_setting);
-            rg_tab_bar.setOnCheckedChangeListener(this);
-
-            vpager = findViewById(R.id.vpager);
-            vpager.setAdapter(mAdapter);
-            vpager.setCurrentItem(0);
-            vpager.addOnPageChangeListener(this);
+        txt_title = (TextView) findViewById(R.id.txt_title);
+        fl_content = (FrameLayout) findViewById(R.id.fl_content);
     }
 
+
+    //点击回退键的处理：判断Fragment栈中是否有Fragment
+    //没，双击退出程序，否则像是Toast提示
+    //有，popbackstack弹出栈
     @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-            switch (checkedId) {
-                case R.id.rb_channel:
-                    vpager.setCurrentItem(PAGE_ONE);
-                break;
-                case R.id.rb_message:
-                    vpager.setCurrentItem(PAGE_TWO);
-                break;
-                case R.id.rb_better:
-                    vpager.setCurrentItem(PAGE_THREE);
-                break;
-                case R.id.rb_setting:
-                    vpager.setCurrentItem(PAGE_FOUR);
-                break;
+    public void onBackPressed() {
+        if (fManager.getBackStackEntryCount() == 0) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                super.onBackPressed();
             }
-    }
-
-
-    //重写ViewPager页面切换的处理方法
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-            //state的状态有三个，0表示什么都没做，1正在滑动，2滑动完毕
-            if (state == 2) {
-                switch (vpager.getCurrentItem()) {
-                    case PAGE_ONE:
-                        rb_channel.setChecked(true);
-                    break;
-                    case PAGE_TWO:
-                        rb_message.setChecked(true);
-                    break;
-                    case PAGE_THREE:
-                        rb_better.setChecked(true);
-                    break;
-                    case PAGE_FOUR:
-                        rb_setting.setChecked(true);
-                    break;
-                }
-            }
+        } else {
+            fManager.popBackStack();
+            txt_title.setText("新闻列表");
+        }
     }
 }
