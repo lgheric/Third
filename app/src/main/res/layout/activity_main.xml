@@ -5,21 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/txt_title"
+    <fragment
+        android:id="@+id/fragment1"
+        android:name="com.eric.third.MyFragment1"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/blue"
-        android:textColor="@color/div_white"
-        android:text="新闻列表"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:layout_height="match_parent" />
 
-    <FrameLayout
-        android:id="@+id/fl_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/txt_title"/>
 
 </RelativeLayout>
