@@ -29,47 +29,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void bindViews() {
+        editname = findViewById(R.id.edittitle);
         editdetail = findViewById(R.id.editdetail);
-        editname = findViewById(R.id.editname);
-        btnclean = findViewById(R.id.btnclean);
         btnsave = findViewById(R.id.btnsave);
+        btnclean = findViewById(R.id.btnclean);
         btnread = findViewById(R.id.btnread);
 
-        btnclean.setOnClickListener(this);
         btnsave.setOnClickListener(this);
+        btnclean.setOnClickListener(this);
         btnread.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch (v.getId()){
             case R.id.btnclean:
                 editdetail.setText("");
                 editname.setText("");
                 break;
             case R.id.btnsave:
-                FileHelper fHelper = new FileHelper(mContext);
                 String filename = editname.getText().toString();
                 String filedetail = editdetail.getText().toString();
-                try {
-                    fHelper.save(filename, filedetail);
+                SDFileHelper sdHelper = new SDFileHelper(mContext);
+                try
+                {
+                    SDFileHelper.verifyStoragePermissions(this);
+                    sdHelper.savaFileToSD(filename, filedetail);
                     Toast.makeText(mContext, "数据写入成功", Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
+                }
+                catch(Exception e){
                     e.printStackTrace();
                     Toast.makeText(mContext, "数据写入失败", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnread:
                 String detail = "";
-                FileHelper fHelper2 = new FileHelper(mContext);
-                try {
-                    String fname = editname.getText().toString();
-                    detail = fHelper2.read(fname);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                SDFileHelper sdHelper2 = new SDFileHelper(mContext);
+                try
+                {
+                    String filename2 = editname.getText().toString();
+                    detail = sdHelper2.readFromSD(filename2);
                 }
+                catch(IOException e){e.printStackTrace();}
                 Toast.makeText(mContext, detail, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
+
+
 }

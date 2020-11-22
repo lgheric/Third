@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,54 +10,42 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nametitle" />
+        android:text="清输入文件名" />
 
     <EditText
-        android:id="@+id/editname"
+        android:id="@+id/edittitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:inputType="text"
-        tools:ignore="LabelFor" />
+        android:hint="文件名" />
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/detailtitle" />
+        android:text="清输入文件内容" />
 
     <EditText
         android:id="@+id/editdetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minLines="2"
-        android:autofillHints=""
-        android:inputType="text"
-        tools:ignore="LabelFor" />
+        android:hint="文件内容" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <Button
+        android:id="@+id/btnsave"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="保存到SD卡" />
 
-        <Button
-            android:id="@+id/btnsave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btnwrite"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/btnclean"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btnclean"
-            tools:ignore="ButtonStyle" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnclean"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="清空" />
 
     <Button
         android:id="@+id/btnread"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btnread" />
+        android:text="读取sd卡中的文件" />
 
 </LinearLayout>
