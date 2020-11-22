@@ -7,31 +7,9 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="100dp"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/man_tv"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:textSize="20dp"
-            android:gravity="center"
-            android:text="男装"/>
-
-        <Button
-            android:id="@+id/woman_tv"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:textSize="20dp"
-            android:gravity="center"
-            android:text="女装"/>
-
-    </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/shop_content"
+        android:id="@+id/LinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
