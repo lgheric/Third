@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.FileOutputStream;
 import java.util.Map;
 
 public class    MainActivity extends AppCompatActivity {
@@ -44,6 +43,7 @@ public class    MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 strname = editname.getText().toString();
                 strpasswd = editpasswd.getText().toString();
+                strpasswd = Md5Util.getMD5(strpasswd);
                 sh.save(strname,strpasswd);
             }
         });
