@@ -16,4 +16,7 @@
     <string name="btnclean">清空</string>
     <string name="btnread">读取文件内容</string>
 
+    <string name="get_img">请求图片</string>
+    <string name="get_html_code">请求HTML代码</string>
+    <string name="set_html_code">将HTML代码加载到WebView</string>
 </resources>

@@ -1,88 +1,138 @@
 package com.eric.third;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.Objects;
 
-    private Context mContext;
-    private Button btn_insert;
-    private Button btn_query;
-    private Button btn_update;
-    private Button btn_delete;
-    private SQLiteDatabase db;
-    private MyDBOpenHelper myDBHelper;
-    private StringBuilder sb;
-    private int i = 1;
+public class MainActivity extends AppCompatActivity {
+
+    private TextView txtMenu, txtshow;
+    private ImageView imgPic;
+    private WebView webView;
+    private ScrollView scroll;
+    private Bitmap bitmap;
+    private String detail = "";
+    private boolean flag = false;
+    private final static String PIC_URL = "https://ww2.sinaimg.cn/large/7a8aed7bgw1evshgr5z3oj20hs0qo0vq.jpg";
+    private final static String HTML_URL = "https://www.baidu.com";
+
+    // 用于刷新界面
+    private Handler handler = new Handler(Objects.requireNonNull(Looper.myLooper())) {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0x001:
+                    hideAllWidget();
+                    imgPic.setVisibility(View.VISIBLE);
+                    imgPic.setImageBitmap(bitmap);
+                    Toast.makeText(MainActivity.this, "图片加载完毕", Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x002:
+                    hideAllWidget();
+                    scroll.setVisibility(View.VISIBLE);
+                    txtshow.setText(detail);
+                    Toast.makeText(MainActivity.this, "HTML代码加载完毕", Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x003:
+                    hideAllWidget();
+                    webView.setVisibility(View.VISIBLE);
+                    webView.loadDataWithBaseURL("", detail, "text/html", "UTF-8", "");
+                    Toast.makeText(MainActivity.this, "网页加载完毕", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        ;
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mContext = MainActivity.this;
-        myDBHelper = new MyDBOpenHelper(mContext, "my.db", null, 1);
-        bindViews();
+        setViews();
     }
 
-    private void bindViews() {
-        btn_insert = (Button) findViewById(R.id.btn_insert);
-        btn_query = (Button) findViewById(R.id.btn_query);
-        btn_update = (Button) findViewById(R.id.btn_update);
-        btn_delete = (Button) findViewById(R.id.btn_delete);
+    private void setViews() {
+        txtMenu = (TextView) findViewById(R.id.txtMenu);
+        txtshow = (TextView) findViewById(R.id.txtshow);
+        imgPic = (ImageView) findViewById(R.id.imgPic);
+        webView = (WebView) findViewById(R.id.webView);
+        scroll = (ScrollView) findViewById(R.id.scroll);
+        registerForContextMenu(txtMenu);
+    }
 
-        btn_query.setOnClickListener(this);
-        btn_insert.setOnClickListener(this);
-        btn_update.setOnClickListener(this);
-        btn_delete.setOnClickListener(this);
+    // 定义一个隐藏所有控件的方法:
+    private void hideAllWidget() {
+        imgPic.setVisibility(View.GONE);
+        scroll.setVisibility(View.GONE);
+        webView.setVisibility(View.GONE);
     }
 
     @Override
-    public void onClick(View v) {
-        db = myDBHelper.getWritableDatabase();
-        switch (v.getId()) {
-            case R.id.btn_insert:
-                ContentValues values1 = new ContentValues();
-                values1.put("name", "呵呵~" + i);
-                i++;
-                //参数依次是：表名，强行插入null值得数据列的列名，一行记录的数据
-                db.insert("person", null, values1);
-                Toast.makeText(mContext, "插入完毕~", Toast.LENGTH_SHORT).show();
+    // 重写上下文菜单的创建方法
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        MenuInflater inflator = new MenuInflater(this);
+        inflator.inflate(R.menu.menus, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    // 上下文菜单被点击是触发该方法
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.one:
+                new Thread() {
+                    public void run() {
+                        try {
+                            byte[] data = GetData.getImage(PIC_URL);
+                            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        handler.sendEmptyMessage(0x001);
+                    }
+
+                    ;
+                }.start();
                 break;
-            case R.id.btn_query:
-                sb = new StringBuilder();
-                //参数依次是:表名，列名，where约束条件，where中占位符提供具体的值，指定group by的列，进一步约束
-                //指定查询结果的排序方式
-                Cursor cursor = db.query("person", null, null, null, null, null, null);
-                if (cursor.moveToFirst()) {
-                    do {
-                        int pid = cursor.getInt(cursor.getColumnIndex("personid"));
-                        String name = cursor.getString(cursor.getColumnIndex("name"));
-                        sb.append("id：").append(pid).append("：").append(name).append("\n");
-                    } while (cursor.moveToNext());
+            case R.id.two:
+                new Thread() {
+                    public void run() {
+                        try {
+                            detail = GetData.getHtml(HTML_URL);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        handler.sendEmptyMessage(0x002);
+                    };
+                }.start();
+                break;
+            case R.id.three:
+                if (detail.equals("")) {
+                    Toast.makeText(MainActivity.this, "先请求HTML先嘛~", Toast.LENGTH_SHORT).show();
+                } else {
+                    handler.sendEmptyMessage(0x003);
                 }
-                cursor.close();
-                Toast.makeText(mContext, sb.toString(), Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.btn_update:
-                ContentValues values2 = new ContentValues();
-                values2.put("name", "嘻嘻~");
-                //参数依次是表名，修改后的值，where条件，以及约束，如果不指定三四两个参数，会更改所有行
-                db.update("person", values2, "name = ?", new String[]{"呵呵~2"});
-                Toast.makeText(mContext, "更新完毕~", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.btn_delete:
-                //参数依次是表名，以及where条件与约束
-                db.delete("person", "personid = ?", new String[]{"3"});
-                Toast.makeText(mContext, "删除完毕~", Toast.LENGTH_SHORT).show();
                 break;
         }
+        return true;
     }
 }

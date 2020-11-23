@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Menu对应一个Menu的格式 -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item
+    android:id="@+id/one"
+    android:title="@string/get_img"
+    android:orderInCategory = "3"
+    android:icon="@mipmap/ic_launcher_round" />
+
+<item
+    android:id="@+id/two"
+    android:orderInCategory="2"
+    android:title="@string/get_html_code" />
+
+<item
+    android:id="@+id/three"
+    android:orderInCategory="4"
+    android:title="@string/set_html_code" />
+
+</menu>
