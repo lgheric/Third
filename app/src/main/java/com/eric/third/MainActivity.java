@@ -1,23 +1,22 @@
 package com.eric.third;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.Map;
 
+public class MainActivity extends AppCompatActivity {
 
     private EditText editname;
-    private EditText editdetail;
-    private Button btnsave;
-    private Button btnclean;
-    private Button btnread;
+    private EditText editpasswd;
+    private Button btnlogin;
+    private String strname;
+    private String strpasswd;
+    private SharedHelper sh;
     private Context mContext;
 
     @Override
@@ -25,56 +24,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
+        sh = new SharedHelper(mContext);
         bindViews();
     }
 
     private void bindViews() {
-        editname = findViewById(R.id.edittitle);
-        editdetail = findViewById(R.id.editdetail);
-        btnsave = findViewById(R.id.btnsave);
-        btnclean = findViewById(R.id.btnclean);
-        btnread = findViewById(R.id.btnread);
-
-        btnsave.setOnClickListener(this);
-        btnclean.setOnClickListener(this);
-        btnread.setOnClickListener(this);
+        editname = (EditText)findViewById(R.id.editname);
+        editpasswd = (EditText)findViewById(R.id.editpasswd);
+        btnlogin = (Button)findViewById(R.id.btnlogin);
+        btnlogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                strname = editname.getText().toString();
+                strpasswd = editpasswd.getText().toString();
+                sh.save(strname,strpasswd);
+            }
+        });
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnclean:
-                editdetail.setText("");
-                editname.setText("");
-                break;
-            case R.id.btnsave:
-                String filename = editname.getText().toString();
-                String filedetail = editdetail.getText().toString();
-                SDFileHelper sdHelper = new SDFileHelper(mContext);
-                try
-                {
-                    SDFileHelper.verifyStoragePermissions(this);
-                    sdHelper.savaFileToSD(filename, filedetail);
-                    Toast.makeText(mContext, "数据写入成功", Toast.LENGTH_SHORT).show();
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                    Toast.makeText(mContext, "数据写入失败", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.btnread:
-                String detail = "";
-                SDFileHelper sdHelper2 = new SDFileHelper(mContext);
-                try
-                {
-                    String filename2 = editname.getText().toString();
-                    detail = sdHelper2.readFromSD(filename2);
-                }
-                catch(IOException e){e.printStackTrace();}
-                Toast.makeText(mContext, detail, Toast.LENGTH_SHORT).show();
-                break;
-        }
+    protected void onStart() {
+        super.onStart();
+        Map<String,String> data = sh.read();
+        editname.setText(data.get("username"));
+        editpasswd.setText(data.get("passwd"));
     }
-
 
 }
