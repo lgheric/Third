@@ -6,49 +6,29 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/btn_insert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="用户登陆" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="请输入用户名" />
-
-    <EditText
-        android:id="@+id/editname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="用户名"
-        android:autofillHints=""
-        android:inputType="text" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="请输入密码" />
-
-    <EditText
-        android:id="@+id/editpasswd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="密码"
-        android:inputType="textPassword"
-        android:autofillHints="" />
+        android:text="插入一条数据" />
 
     <Button
-        android:id="@+id/btnlogin"
+        android:id="@+id/btn_query"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="登录" />
+        android:text="查询当前表中的数据" />
 
     <Button
-        android:id="@+id/btnshow"
+        android:id="@+id/btn_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="显示second SP文件保存的账号密码" />
+        android:text="修改表中的一条数据" />
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="删除表中的一条数据" />
 
 
 </LinearLayout>
