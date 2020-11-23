@@ -43,4 +43,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="登录" />
+
+    <Button
+        android:id="@+id/btnshow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="显示second SP文件保存的账号密码" />
+
+
 </LinearLayout>
