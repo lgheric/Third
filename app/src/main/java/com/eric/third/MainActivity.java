@@ -1,78 +1,47 @@
 package com.eric.third;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.eric.third.util.GetData;
-import com.eric.third.util.PostUtils;
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import java.util.Objects;
+import com.eric.third.util.DomHelper;
+import com.eric.third.util.PullHelper;
+import com.eric.third.util.SaxHelper;
 
-public class MainActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-    private TextView txtMenu, txtshow;
-    private ImageView imgPic;
-    private WebView webView;
-    private ScrollView scroll;
-    private Bitmap bitmap;
-    private String detail = "";
-    private boolean flag = false;
-    private final static String PIC_URL = "https://ww2.sinaimg.cn/large/7a8aed7bgw1evshgr5z3oj20hs0qo0vq.jpg";
-    private final static String HTML_URL = "https://www.baidu.com";
-    private EditText username;
-    private EditText passwd;
-    private Button btn_login;
-    private String post_result="";
-    // 用于刷新界面
-    private Handler handler = new Handler(Objects.requireNonNull(Looper.myLooper())) {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0x001:
-                    hideAllWidget();
-                    imgPic.setVisibility(View.VISIBLE);
-                    imgPic.setImageBitmap(bitmap);
-                    Toast.makeText(MainActivity.this, "图片加载完毕", Toast.LENGTH_SHORT).show();
-                    break;
-                case 0x002:
-                    hideAllWidget();
-                    scroll.setVisibility(View.VISIBLE);
-                    txtshow.setText(detail);
-                    Toast.makeText(MainActivity.this, "HTML代码加载完毕", Toast.LENGTH_SHORT).show();
-                    break;
-                case 0x003:
-                    hideAllWidget();
-                    webView.setVisibility(View.VISIBLE);
-                    webView.loadDataWithBaseURL("", detail, "text/html", "UTF-8", "");
-                    Toast.makeText(MainActivity.this, "网页加载完毕", Toast.LENGTH_SHORT).show();
-                    break;
-                case 0x004:
-                    Toast.makeText(MainActivity.this, "登录成功\n"+post_result, Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    break;
-            }
-        }
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-        ;
-    };
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private Button btnsax;
+    private Button btndom;
+    private Button btnpullread;
+    private Button btnpullwrite;
+    private Button btnjson;
+    private ListView list;
+    private ArrayList<Person> persons;
+    private ArrayAdapter<Person> mAdapter;
+    private String myjson = "[\n" +
+            "    { \"id\":\"1\",\"name\":\"基神\",\"age\":\"18\" },\n" +
+            "    { \"id\":\"2\",\"name\":\"B神\",\"age\":\"19\"  },\n" +
+            "    { \"id\":\"3\",\"name\":\"曹神\",\"age\":\"20\" }\n" +
+            "]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,89 +51,133 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        txtMenu = findViewById(R.id.txtMenu);
-        txtshow = findViewById(R.id.txtshow);
-        imgPic = findViewById(R.id.imgPic);
-        webView = findViewById(R.id.webView);
-        //scroll = (ScrollView) findViewById(R.id.scroll);
-        registerForContextMenu(txtMenu);
+        list = findViewById(R.id.list);
+        btnsax = findViewById(R.id.btnsax);
+        btndom = findViewById(R.id.btndom);
+        btnpullread = findViewById(R.id.btnpullread);
+        btnpullwrite = findViewById(R.id.btnpullwrite);
+        btnjson = findViewById(R.id.btnjson);
 
-        btn_login = findViewById(R.id.btn_login);
-         username = findViewById(R.id.username);
-         passwd = findViewById(R.id.passwd);
-
-         btn_login.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 new Thread(){
-                     public void run(){
-                         try {
-                             post_result = PostUtils.LoginByPost(username.getText().toString(), passwd.getText().toString());
-                             System.out.println(post_result);
-                         } catch (Exception e) {
-                             e.printStackTrace();
-                         }
-                         handler.sendEmptyMessage(0x004);
-                     }
-                 }.start();
-             }
-         });
+        btnsax.setOnClickListener(this);
+        btndom.setOnClickListener(this);
+        btnpullread.setOnClickListener(this);
+        btnpullwrite.setOnClickListener(this);
+        btnjson.setOnClickListener(this);
     }
 
-    // 定义一个隐藏所有控件的方法:
-    private void hideAllWidget() {
-        imgPic.setVisibility(View.GONE);
-        scroll.setVisibility(View.GONE);
-        webView.setVisibility(View.GONE);
+    private ArrayList<Person> readxmlForSAX() throws Exception {
+        //获取文件资源建立输入流对象
+        InputStream is = getAssets().open("person1.xml");
+        //①创建XML解析处理器
+        SaxHelper ss = new SaxHelper();
+        //②得到SAX解析工厂
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        //③创建SAX解析器
+        SAXParser parser = factory.newSAXParser();
+        //④将xml解析处理器分配给解析器,对文档进行解析,将事件发送给处理器
+        parser.parse(is, ss);
+        is.close();
+        return ss.getPersons();
     }
+
 
     @Override
-    // 重写上下文菜单的创建方法
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        MenuInflater inflator = new MenuInflater(this);
-        inflator.inflate(R.menu.menus, menu);
-        super.onCreateContextMenu(menu, v, menuInfo);
-    }
-
-    // 上下文菜单被点击是触发该方法
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.one:
-                new Thread() {
-                    public void run() {
-                        try {
-                            byte[] data = GetData.getImage(PIC_URL);
-                            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        handler.sendEmptyMessage(0x001);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnsax:
+                try {
+                    persons = readxmlForSAX();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mAdapter = new ArrayAdapter<>(MainActivity.this,
+                        android.R.layout.simple_expandable_list_item_1, persons);
+                list.setAdapter(mAdapter);
+                break;
+            case R.id.btndom:
+                DomHelper ds = new DomHelper();
+                persons = ds.queryXML(getApplicationContext());
+                mAdapter = new ArrayAdapter<Person>(MainActivity.this, android.R.layout.simple_expandable_list_item_1, persons);
+                list.setAdapter(mAdapter);
+                break;
+            case R.id.btnpullread:
+                //获取文件资源建立输入流对象
+                try {
+                    InputStream is = getAssets().open("person3.xml");
+                    persons = PullHelper.getPersons(is);
+                    is.close();
+                    if(persons.equals(null)){
+                        Toast.makeText(getApplicationContext(), "呵呵", Toast.LENGTH_SHORT).show();
                     }
-
-                    ;
-                }.start();
+                    for(Person p1 :persons)
+                    {
+                        Log.i("逗比", p1.toString());
+                    }
+                    mAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_expandable_list_item_1, persons);
+                    list.setAdapter(mAdapter);
+                } catch (Exception e) {e.printStackTrace();}
                 break;
-            case R.id.two:
-                new Thread() {
-                    public void run() {
-                        try {
-                            detail = GetData.getHtml(HTML_URL);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        handler.sendEmptyMessage(0x002);
-                    };
-                }.start();
-                break;
-            case R.id.three:
-                if (detail.equals("")) {
-                    Toast.makeText(MainActivity.this, "先请求HTML先嘛~", Toast.LENGTH_SHORT).show();
-                } else {
-                    handler.sendEmptyMessage(0x003);
+            case R.id.btnpullwrite:
+                Context context = getApplicationContext();
+                List<Person> persons = new ArrayList<>();
+                persons.add(new Person(21,"逗比1",70));
+                persons.add(new Person(31,"逗比2",50));
+                persons.add(new Person(11,"逗比3",30));
+                File xmlFile = new File(context.getFilesDir(),"jay.xml");
+                FileOutputStream fos;
+                try {
+                    fos = new FileOutputStream(xmlFile);
+                    PullHelper.save(persons, fos);
+                    fos.close();
+                    Toast.makeText(context, "文件写入完毕", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
+            case R.id.btnjson:
+                persons = parseEasyJson(myjson);
+                mAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_expandable_list_item_1, persons);
+                list.setAdapter(mAdapter);
+                break;
         }
-        return true;
+    }
+
+    private ArrayList<Person> parseEasyJson(String json){
+        persons = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            for(int i = 0;i < jsonArray.length();i++){
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                Person person = new Person();
+                person.setId(i);
+                person.setName(jsonObject.getString("name"));
+                person.setAge(Integer.parseInt(jsonObject.getString("age")));
+                persons.add(person);
+            }
+        }catch (Exception e){e.printStackTrace();}
+        System.out.println(persons.toString());
+        return persons;
+    }
+
+    private void parseDiffJson(String json) {
+        try {
+            JSONObject jsonObject1 = new JSONObject(json);
+            Log.e("Json", json);
+            JSONArray jsonArray = jsonObject1.getJSONArray("ch");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                //取出name
+                String sname = jsonObject.getString("names");
+                JSONArray jarray1 = jsonObject.getJSONArray("data");
+                JSONArray jarray2 = jsonObject.getJSONArray("times");
+                Log.e("Json", sname);
+                Log.e("Json", jarray1.toString());
+                Log.e("Json", jarray2.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
+

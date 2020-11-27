@@ -1,67 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
->
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/txtMenu"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#4EA9E9"
-        android:clickable="true"
-        android:gravity="center"
-        android:text="长按我，加载菜单"
-        android:textSize="20sp"
-        android:focusable="true" />
-
-    <ImageView
-        android:id="@+id/imgPic"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:contentDescription="@string/hello_world" />
-
-
-        <TextView
-            android:id="@+id/txtshow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    <WebView
-        android:id="@+id/webView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="WebViewLayout" />
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/username"
-            android:text="请输入用户名"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints="请输入用户名"
-            android:inputType="text"
-            tools:ignore="LabelFor" />
-        <EditText
-            android:id="@+id/passwd"
-            android:text="请输入密码"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints="请输入密码"
-            android:inputType="textPassword"
-            tools:ignore="LabelFor" />
         <Button
-            android:id="@+id/btn_login"
-            android:text="login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/btnsax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SAX解析xml"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/btndom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dom解析xml"
+            tools:ignore="ButtonStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnpullread"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pull解析xml"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/btnpullwrite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pull生成xml"
+            tools:ignore="ButtonStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnjson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="解析json"
+            tools:ignore="ButtonStyle" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>
-</ScrollView>
