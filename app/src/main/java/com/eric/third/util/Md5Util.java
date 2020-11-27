@@ -1,4 +1,4 @@
-package com.eric.third;
+package com.eric.third.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -1,4 +1,4 @@
-package com.eric.third;
+package com.eric.third.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

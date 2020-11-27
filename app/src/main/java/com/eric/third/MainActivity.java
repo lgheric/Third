@@ -11,12 +11,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eric.third.util.GetData;
+import com.eric.third.util.PostUtils;
 
 import java.util.Objects;
 
@@ -31,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean flag = false;
     private final static String PIC_URL = "https://ww2.sinaimg.cn/large/7a8aed7bgw1evshgr5z3oj20hs0qo0vq.jpg";
     private final static String HTML_URL = "https://www.baidu.com";
-
+    private EditText username;
+    private EditText passwd;
+    private Button btn_login;
+    private String post_result="";
     // 用于刷新界面
     private Handler handler = new Handler(Objects.requireNonNull(Looper.myLooper())) {
         public void handleMessage(Message msg) {
@@ -54,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                     webView.loadDataWithBaseURL("", detail, "text/html", "UTF-8", "");
                     Toast.makeText(MainActivity.this, "网页加载完毕", Toast.LENGTH_SHORT).show();
                     break;
+                case 0x004:
+                    Toast.makeText(MainActivity.this, "登录成功\n"+post_result, Toast.LENGTH_SHORT).show();
+                    break;
                 default:
                     break;
             }
@@ -71,12 +82,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        txtMenu = (TextView) findViewById(R.id.txtMenu);
-        txtshow = (TextView) findViewById(R.id.txtshow);
-        imgPic = (ImageView) findViewById(R.id.imgPic);
-        webView = (WebView) findViewById(R.id.webView);
-        scroll = (ScrollView) findViewById(R.id.scroll);
+        txtMenu = findViewById(R.id.txtMenu);
+        txtshow = findViewById(R.id.txtshow);
+        imgPic = findViewById(R.id.imgPic);
+        webView = findViewById(R.id.webView);
+        //scroll = (ScrollView) findViewById(R.id.scroll);
         registerForContextMenu(txtMenu);
+
+        btn_login = findViewById(R.id.btn_login);
+         username = findViewById(R.id.username);
+         passwd = findViewById(R.id.passwd);
+
+         btn_login.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 new Thread(){
+                     public void run(){
+                         try {
+                             post_result = PostUtils.LoginByPost(username.getText().toString(), passwd.getText().toString());
+                             System.out.println(post_result);
+                         } catch (Exception e) {
+                             e.printStackTrace();
+                         }
+                         handler.sendEmptyMessage(0x004);
+                     }
+                 }.start();
+             }
+         });
     }
 
     // 定义一个隐藏所有控件的方法:

@@ -1,4 +1,4 @@
-package com.eric.third;
+package com.eric.third.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
