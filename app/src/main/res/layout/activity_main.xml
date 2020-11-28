@@ -7,63 +7,10 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnsax"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SAX解析xml"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/btndom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dom解析xml"
-            tools:ignore="ButtonStyle" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnpullread"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="pull解析xml"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/btnpullwrite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="pull生成xml"
-            tools:ignore="ButtonStyle" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnjson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="解析json"
-            tools:ignore="ButtonStyle" />
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+ <Button
+     android:id="@+id/btn_send_img"
+     android:text="send img"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"/>
 
 </LinearLayout>
