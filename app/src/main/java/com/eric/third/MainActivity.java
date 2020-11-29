@@ -6,13 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -31,6 +36,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "ERIC";
     private static final String IMGUR_CLIENT_ID = "...";
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+    TextView txt_show;
+    WebView web_show;
+    private String responseData="";
+    final Handler myHandler = new Handler(Objects.requireNonNull(Looper.myLooper())){
+        @Override
+        public void handleMessage(Message msg){
+            if(msg.what == 0x123){
+                //web_show.loadData(responseData,"text/html", "UTF-8");
+                txt_show.setText(responseData);
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void bindView(){
-        TextView txt_show = findViewById(R.id.txt_show);
+        txt_show = findViewById(R.id.txt_show);
+        web_show = findViewById(R.id.web_show);
         Button btn_async_get = findViewById(R.id.btn_async_get);
         Button btn_sync_get = findViewById(R.id.btn_sync_get);
         Button btn_post_string = findViewById(R.id.btn_post_string);
@@ -236,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .add("search", "Jurassic Park")
                 .build();
         Request request = new Request.Builder()
-                .url("https://en.wikipedia.org/w/index.php")
+                .url("http://192.168.43.80:8080/index/uploadIcon")//https://en.wikipedia.org/w/index.php
                 .post(requestBody)
                 .build();
 
@@ -254,7 +273,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG, headers.name(i) + ":" + headers.value(i));
                 }
                 assert response.body() != null;
-                Log.d(TAG, "onResponse: " + response.body().string());
+                //Log.d(TAG, "onResponse: " + response.body().string());
+                responseData = response.body().string();//注意：只能调用一次
+                myHandler.sendEmptyMessage(0x123);
             }
         });
     }
@@ -276,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Request request = new Request.Builder()
                 .header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
-                .url("https://api.imgur.com/3/image")
+                .url("http://192.168.43.80:8080/index/uploadIcon")//https://api.imgur.com/3/image
                 .post(body)
                 .build();
 
