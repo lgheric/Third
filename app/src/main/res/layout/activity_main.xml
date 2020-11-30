@@ -1,89 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity"
-    tools:ignore="ScrollViewCount">
+    tools:context=".MainActivity" >
 
- <Button
-     android:id="@+id/btn_async_get"
-     android:text="异步GET请求"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"/>
- <Button
-     android:id="@+id/btn_sync_get"
-     android:text="同步GET请求"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"/>
+ <TextView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:text="请输入图片的网络地址" />
 
- <Button
-     android:id="@+id/btn_post_string"
-     android:text="POST方式提交String"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"/>
-
- <Button
-     android:id="@+id/btn_post_stream"
-     android:text="POST方式提交流"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"/>
-
- <Button
-     android:id="@+id/btn_post_file"
-     android:text="POST提交文件"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"/>
-
- <Button
-     android:id="@+id/btn_post_form"
-     android:text="POST方式提交表单"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"/>
-
- <Button
-     android:id="@+id/btn_post_part"
-     android:text="POST方式提交分块请求"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"/>
-
- <Button
-     android:id="@+id/btn_okhttp3_download"
-     android:text="OKhttp3下载文件"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"/>
-
- <Button
-     android:id="@+id/btn_file_download"
+ <EditText
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
-     android:text="文件下载"
+     android:id="@+id/editurl"
+     android:text="http://192.168.43.80:8080/static/map.jpg"
      />
-
- <ProgressBar
-     android:id="@+id/pro"
-     android:layout_width="match_parent"
+ <Button
+     android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+     android:id="@+id/btnsave"
+     android:text="缓存文件"
      />
 
-  <TextView
-     android:id="@+id/txt_show"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:textColor="@color/blue"
-      android:textSize="30sp"
-     />
-
-
- <WebView
-     android:id="@+id/web_show"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     />
-
- </LinearLayout>
-
-
-
+</LinearLayout>
