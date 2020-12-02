@@ -8,12 +8,8 @@
     android:paddingBottom="@dimen/vertical_page_margin"
     android:orientation="vertical"
     >
-
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Permissions"
-        />
-
+<TextView
+    android:id="@+id/txt_show"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
 </LinearLayout>
