@@ -36,7 +36,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config"
-        tools:targetApi="n">
+        tools:targetApi="n"
+        >
+        <meta-data
+            android:name="RONG_CLOUD_APP_KEY"
+            android:value="https://192.168.43.80:8080/static/laowang_vpn.apk" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,6 +49,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".PermissionsActivity" />
+        <activity android:name=".UpdateAct" />
+
+        <receiver android:name=".Receiver">
+            <intent-filter>
+                <action android:name = "android.intent.cation.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

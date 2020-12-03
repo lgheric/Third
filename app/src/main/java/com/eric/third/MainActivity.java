@@ -1,5 +1,6 @@
 package com.eric.third;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,20 +23,13 @@ public class MainActivity extends AppCompatActivity  {
         Button btnsave2 = findViewById(R.id.btnsave2);
 
         btnsave2.setOnClickListener(view -> {
-
                 new Thread(){
-
                     @Override
                     public void run(){
-
-                        try {
-                            Downloader.download();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        startActivity(new Intent(MainActivity.this,UpdateAct.class));
                     }
-
                 }.start();
+            finish();
 
         });
     }
