@@ -24,10 +24,22 @@
             android:text="http://192.168.43.80:8080/static/map.jpg"
             />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="请输入文件的网络地址" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editurl2"
+            android:text="http://192.168.43.80:8080/lenovodm.exe"
+            />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnsave"
+            android:id="@+id/btnsave2"
             android:text="缓存文件"
             />
     </LinearLayout>
