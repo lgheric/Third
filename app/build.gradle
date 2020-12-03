@@ -53,4 +53,6 @@ dependencies {
     implementation 'com.hjq:titlebar:8.2'
     //国际化框架：https://github.com/getActivity/MultiLanguages
     implementation 'com.hjq:language:5.0'
+
+    implementation files('libs/ksoap2-android-assembly-2.5.4-jar-with-dependencies.jar')
 }

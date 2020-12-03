@@ -1,49 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    android:padding="5dp"
+    tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="请输入要下载的文件地址" />
     <EditText
-        android:id="@+id/editpath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="http://192.168.43.80:8080/static/chuandeng.mp3"
-        />
-    <Button
+        android:id="@+id/edit_param"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btndown"
-        android:text="下载"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnstop"
-        android:text="停止"
-        android:enabled="false"
-        />
+        android:hint="请输入查询的相关参数" />
 
-    <ProgressBar
-        android:layout_width="fill_parent"
-        android:layout_height="18dp"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:id="@+id/progressBar"
-        />
+    <Button
+        android:id="@+id/btn_attribution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="号码归属地查询" />
+
+    <Button
+        android:id="@+id/btn_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="城市天气查询" />
 
     <TextView
-        android:layout_width="fill_parent"
+        android:id="@+id/txt_result"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:id="@+id/textresult"
-        android:text="显示实时下载的百分比"
-        />
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:text="结果显示："
+        android:textSize="16sp" />
 
 </LinearLayout>
