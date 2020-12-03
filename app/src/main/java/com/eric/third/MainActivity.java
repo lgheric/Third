@@ -1,54 +1,28 @@
 package com.eric.third;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button btn_back;
-    private TextView txt_title;
-    private Button btn_top;
-    private Button btn_refresh;
-    private WebView wView;
+    private MyWebView wView;
+    private Button btn_icon;
     private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bindViews();
-    }
 
-    private void bindViews() {
-        btn_back = findViewById(R.id.btn_back);
-        txt_title = findViewById(R.id.txt_title);
-        btn_top = findViewById(R.id.btn_top);
-        btn_refresh = findViewById(R.id.btn_refresh);
+        btn_icon = findViewById(R.id.btn_icon);
         wView = findViewById(R.id.wView);
-
-        btn_back.setOnClickListener(this);
-        btn_refresh.setOnClickListener(this);
-        btn_top.setOnClickListener(this);
-
-        wView.loadUrl("https://www.baidu.com");
-        wView.setWebChromeClient(new WebChromeClient() {
-            //这里设置获取到的网站title
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-                txt_title.setText(title);
-            }
-        });
-
+        wView.loadUrl("https://www.hao123.com");
         wView.setWebViewClient(new WebViewClient() {
             //在webview里打开新链接
             @Override
@@ -57,22 +31,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             }
         });
-    }
 
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_back:
-                finish();          //关闭当前Activity
-                break;
-            case R.id.btn_refresh:
-                wView.reload();    //刷新当前页面
-                break;
-            case R.id.btn_top:
-                wView.setScrollY(0);   //滚动到顶部
-                break;
-        }
+        //比如这里做一个简单的判断，当页面发生滚动，显示那个Button
+        wView.setOnScrollChangedCallback((dx, dy) -> {
+            if (dy > 0) {
+                btn_icon.setVisibility(View.VISIBLE);
+            } else {
+                btn_icon.setVisibility(View.GONE);
+            }
+        });
+
+        btn_icon.setOnClickListener(v -> {
+            wView.setScrollY(0);
+            btn_icon.setVisibility(View.GONE);
+        });
+
     }
 
     @Override
@@ -81,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             wView.goBack();
         } else {
             if ((System.currentTimeMillis() - exitTime) > 2000) {
-                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "再按一次退出程序",
+                        Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
@@ -91,4 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    @Override
+    public void onClick(View view) {
+
+    }
 }
