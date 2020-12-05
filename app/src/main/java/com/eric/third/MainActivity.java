@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
+import android.webkit.DownloadListener;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
@@ -79,6 +81,26 @@ public class MainActivity extends AppCompatActivity {
         wView.getSettings().setDefaultTextEncodingName("UTF-8");
         wView.addJavascriptInterface(new SharpJS(), "sharp");
         wView.loadUrl("file:///android_asset/demo3.html");
+        //WebView file download.
+//        wView.setDownloadListener(new DownloadListener(){
+//            @Override
+//            public void onDownloadStart(String url, String userAgent, String contentDisposition,
+//                                        String mimetype, long contentLength) {
+//                Log.e("ERIC","开始下载");
+//                Uri uri = Uri.parse(url);
+//                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+//                startActivity(intent);
+//            }
+//        });
+
+        wView.setDownloadListener(new DownloadListener(){
+            @Override
+            public void onDownloadStart(String url, String userAgent, String contentDisposition,
+                                        String mimetype, long contentLength) {
+                Log.e("HEHE","onDownloadStart被调用：下载链接：" + url);
+                new Thread(new DownLoadThread(url)).start();
+            }
+        });
     }
 
     //自定义一个Js的业务类,传递给JS的对象就是这个,调用时直接javascript:sharp.contactlist()
@@ -173,6 +195,5 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
         return Contacts;
     }
-
 
 }
