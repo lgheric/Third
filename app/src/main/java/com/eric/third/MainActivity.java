@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -85,23 +86,45 @@ public class MainActivity extends AppCompatActivity {
     //1,Android4.2后，只有添加 @JavascriptInterface 声明的Java方法才可以被JavaScript调用
     //2,所有的WebView方法都应该在同一个线程程中调用，而这里的contactlist方法却在 JavaBridge线程中被调用了！
     // 所以我们要要把contactlist里的东东写到同一个线程中，比如一种解决 方法，就是下面这种：
-
+    //java.lang.Throwable: A WebView method was called on thread 'JavaBridge'.
+    // All WebView methods must be called on the same thread.
+    // (Expected Looper Looper (main, tid 2) {f2e4762} called on Looper (JavaBridge, tid 22388)
+    // {4c4c19c}, FYI main Looper is Looper (main, tid 2) {f2e4762})
     public class SharpJS {
 
         @JavascriptInterface
         public void contactlist() {
-            //使用post()方法使WebView方法保持在同一线程中调用
+//            runOnUiThread(newRunnable(){
+//                @Override
+//                publicvoid run(){
+//                    // Code for WebView goes here
+//                }
+//            });
+            //方法1：使用post()方法使WebView方法保持在同一线程中调用
             wView.post(() -> {
 
                 try {
                     System.out.println("contactlist()方法执行了！");
                     String json = buildJson(getContacts());
-                    wView.loadUrl("javascript:show('" + json + "')");
+                    // This code is BAD and will block the UI thread(except in wWiew.post())
+                    //wView.loadUrl("javascript:show('" + json + "')");
+                    //千万不要这样做 Android 4.4中 evaluateJavascript() 就是专门来异步执行JavaScript代码的。
+                    String script = "javascript:show('" + json + "')";
+                    //wView.evaluateJavascript(script, value -> {
+                    wView.evaluateJavascript(script, new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String s) {
+                            //将button显示的文字改成JS返回的字符串
+                            //buttonLeft.setText(s);
+                        }
+                    });
+
                 } catch (Exception e) {
                     System.out.println("设置数据失败" + e);
                 }
 
             });
+
         }
 
         @JavascriptInterface
