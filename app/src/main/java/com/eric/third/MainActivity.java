@@ -2,6 +2,7 @@ package com.eric.third;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -10,6 +11,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,11 +24,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String APP_CACHE_DIRNAME = "/webcache"; // web缓存目录
     private static final String URL = "http://blog.csdn.net/coder_pig";
 
-    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        handleWebView();
+    }
+
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void handleWebView(){
+
         wView = findViewById(R.id.wView);
         btn_clear_cache = findViewById(R.id.btn_clear_cache);
         btn_refresh = findViewById(R.id.btn_refresh);
@@ -48,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
         settings.setDatabaseEnabled(true);
         String cacheDirPath = getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME;
         Log.i("cachePath", cacheDirPath);
+        File f = new File(cacheDirPath);
+        if(!f.exists())f.mkdirs();
         // 设置数据库缓存路径
         settings.setAppCachePath(cacheDirPath);
         settings.setAppCacheEnabled(true);
-        Log.i("databasepath", settings.getDatabasePath());
+        //Log.i("databasepath", settings.getDatabasePath());
 
         btn_clear_cache.setOnClickListener(new View.OnClickListener() {
             @Override
