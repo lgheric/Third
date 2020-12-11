@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_clear_cache;
     private Button btn_refresh;
     private static final String APP_CACHE_DIRNAME = "/webcache"; // web缓存目录
-    private static final String URL = "http://blog.csdn.net/coder_pig";
+    private static final String URL = "http://blog.csdn.cn/coder_pig";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
                 view.loadUrl(url);
                 return true;
             }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description,
+                                        String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                wView.loadUrl("file:///android_asset/error.html");
+            }
+
         });
         WebSettings settings = wView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -57,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         settings.setDatabaseEnabled(true);
         String cacheDirPath = getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME;
         Log.i("cachePath", cacheDirPath);
-        File f = new File(cacheDirPath);
-        if(!f.exists())f.mkdirs();
+        //File f = new File(cacheDirPath);
+        //if(!f.exists())f.mkdirs();
         // 设置数据库缓存路径
         settings.setAppCachePath(cacheDirPath);
         settings.setAppCacheEnabled(true);
