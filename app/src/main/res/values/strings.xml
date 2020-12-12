@@ -36,4 +36,7 @@
     <string name="_4">播放声音4</string>
     <string name="_5">播放声音5</string>
     <string name="soundpool">释放SoundPool</string>
+    <string name="play">播放</string>
+    <string name="pause">暂停</string>
+    <string name="stop">停止</string>
 </resources>

@@ -10,48 +10,25 @@
         >
 
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:background="@mipmap/bg_duang"
-            android:contentDescription="@string/todo" />
-
         <Button
-            android:id="@+id/btn_play1"
+            android:id="@+id/btn_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_1" />
-
-
-        <Button
-            android:id="@+id/btn_play2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/_2" />
+            android:text="@string/play" />
 
         <Button
-            android:id="@+id/btn_play3"
+            android:id="@+id/btn_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_3" />
+            android:enabled="false"
+            android:text="@string/pause" />
 
         <Button
-            android:id="@+id/btn_play4"
+            android:id="@+id/btn_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_4" />
-
-        <Button
-            android:id="@+id/btn_play5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/_5" />
-
-        <Button
-            android:id="@+id/btn_release"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/soundpool" />
+            android:enabled="false"
+            android:text="@string/stop" />
 
     </LinearLayout>
 
