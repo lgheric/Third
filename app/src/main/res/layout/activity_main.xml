@@ -9,8 +9,8 @@
         android:orientation="vertical"
         >
 
-        <SurfaceView
-            android:id="@+id/sfv_show"
+        <VideoView
+            android:id="@+id/videoView"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
 
@@ -24,14 +24,12 @@
             android:id="@+id/btn_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
             android:text="@string/pause" />
 
         <Button
             android:id="@+id/btn_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
             android:text="@string/stop" />
 
     </LinearLayout>
