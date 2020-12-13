@@ -42,6 +42,7 @@
     <string name="cam">拍照</string>
     <string name="default_desc">default desc for imageview</string>
     <string name="use_sys_camera">调用系统照相机</string>
+    <string name="btn_rec">开始录音</string>
 
 
 </resources>

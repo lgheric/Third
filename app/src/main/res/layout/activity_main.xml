@@ -8,21 +8,13 @@
     tools:context=".MainActivity"
     >
 
-    <ImageView
-        android:id="@+id/img_show"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/default_desc" />
 
     <Button
-        android:id="@+id/btn_start"
+        android:id="@+id/btn_control"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/use_sys_camera"
+        android:text="@string/btn_rec"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
