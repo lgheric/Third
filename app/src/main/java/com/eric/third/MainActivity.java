@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
+
         img_show =  findViewById(R.id.img_show);
         Button btn_start = findViewById(R.id.btn_start);
 

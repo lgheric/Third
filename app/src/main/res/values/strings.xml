@@ -41,6 +41,7 @@
     <string name="stop">停止</string>
     <string name="cam">拍照</string>
     <string name="default_desc">default desc for imageview</string>
+    <string name="use_sys_camera">调用系统照相机</string>
 
 
 </resources>

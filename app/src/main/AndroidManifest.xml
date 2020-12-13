@@ -52,6 +52,7 @@
         </activity>
         <activity android:name=".PermissionsActivity" />
         <activity android:name=".UpdateAct" />
+        <activity android:name=".PreviewActivity" />
 
         <receiver android:name=".Receiver">
             <intent-filter>
