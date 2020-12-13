@@ -15,16 +15,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_cam"
         android:contentDescription="@string/default_desc" />
     <Button
-        android:id="@+id/btn_cam"
+        android:id="@+id/btn_start"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/cam"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
        />
 
