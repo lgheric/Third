@@ -44,6 +44,8 @@
     <string name="use_sys_camera">调用系统照相机</string>
     <string name="btn_rec">开始录音</string>
     <string name="btn_socket">接收SOCKET数据</string>
+    <string name="simple_pig_chat">小猪简易聊天室</string>
+    <string name="sent">发送</string>
 
 
 </resources>

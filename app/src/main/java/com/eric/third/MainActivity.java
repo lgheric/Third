@@ -1,60 +1,119 @@
 package com.eric.third;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
-import okhttp3.WebSocket;
+public class MainActivity extends AppCompatActivity implements Runnable {
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    //定义相关变量,完成初始化
+    private TextView txtshow;
+    private EditText editsend;
+    private Button btnsend;
+    private static final String HOST = "192.168.43.80";
+    private static final int PORT = 2345;
+    private Socket socket = null;
+    private BufferedReader in = null;
+    private PrintWriter out = null;
+    private String content = "";
+    private StringBuilder sb = null;
+
+    //定义一个handler对象,用来刷新界面
+    public Handler handler = new Handler(Looper.myLooper()) {
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                sb.append(content);
+                txtshow.setText(sb.toString());
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sb = new StringBuilder();
+        txtshow = (TextView) findViewById(R.id.txtshow);
+        editsend = (EditText) findViewById(R.id.editsend);
+        btnsend = (Button) findViewById(R.id.btnsend);
 
-        Button btn_accept = (Button) findViewById(R.id.btn_accept);
-        btn_accept.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
+        //当程序一开始运行的时候就实例化Socket对象,与服务端进行连接,获取输入输出流
+        //因为4.0以后不能再主线程中进行网络操作,所以需要另外开辟一个线程
         new Thread() {
-            @Override
+
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void run() {
                 try {
-                    acceptServer();
+                    socket = new Socket(HOST, PORT);
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+                            socket.getOutputStream())), true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }.start();
+
+
+        //为发送按钮设置点击事件
+        btnsend.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String msg = editsend.getText().toString();
+                if (socket.isConnected()) {
+                    if (!socket.isOutputShutdown()) {
+                        out.println(msg);
+                    }
+                }
+            }
+        });
+        new Thread(MainActivity.this).start();
+
     }
 
-    private void acceptServer() throws IOException {
-        //1.创建客户端Socket，指定服务器地址和端口
-        System.out.println("准备连接");
-        Socket socket = new Socket();
-        System.out.println("连接上了");
+    //重写run方法,在该方法中输入流的读取
+    @SuppressWarnings("InfiniteLoopStatement")
+    @Override
+    public void run() {
+        try {
+            StringBuilder sb = new StringBuilder();
+            while (true) {
+                if(!socket.equals(null)){
+                    if (socket.isConnected()) {
+                        if (!socket.isInputShutdown()) {
+                            if ((content = in.readLine()) != null) {
+                                sb.append(content).append("\n");
+                                handler.sendEmptyMessage(0x123);
+                            }
+                        }
+                    }
 
-        //2.获取输出流，向服务器端发送信息
-        OutputStream os = socket.getOutputStream();//字节输出流
-        PrintWriter pw = new PrintWriter(os);//将输出流包装为打印流
-        //获取客户端的IP地址
-        InetAddress address = InetAddress.getLocalHost();
-        String ip = address.getHostAddress();
-        pw.write("客户端：~" + ip + "~ 接入服务器！！");
-        System.out.println("客户端：~" + ip + "~ 接入服务器！！");
-        pw.flush();
-        socket.shutdownOutput();//关闭输出流
-        socket.close();
+                }else{
+                    System.out.println("socket is null.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
