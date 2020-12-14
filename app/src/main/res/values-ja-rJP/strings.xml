@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Third</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="tab_menu_alert">リマインダ</string>
+    <string name="tab_menu_profile">メッセージ</string>
+    <string name="tab_menu_pay">私の</string>
+    <string name="tab_menu_setting">設定</string>
+    <string name="nametitle">ファイル名を入力してください</string>
+    <string name="detailtitle">ファイルの内容を入力してください。</string>
+    <string name="btnwrite">書き込み</string>
+    <string name="btnclean">空をクリア</string>
+    <string name="btnread">ファイルの内容を読み込みます</string>
+    <string name="get_img">画像の要求</string>
+    <string name="get_html_code">HTMLコードを要求する</string>
+    <string name="set_html_code">HTMLコードをWebViewにロードします。</string>
+    <string name="_1">サウンド1を再生</string>
+    <string name="_2">サウンド2を再生します</string>
+    <string name="_3">サウンド3を再生します</string>
+    <string name="_4">サウンド4を再生します</string>
+    <string name="_5">サウンド5再生します</string>
+    <string name="soundpool">SoundPoolをリリースします</string>
+    <string name="play">再生</string>
+    <string name="pause">一時停止</string>
+    <string name="stop">停止</string>
+    <string name="cam">写真を撮る</string>
+    <string name="default_desc">default desc for imageview</string>
+    <string name="use_sys_camera">システムカメラを呼び出す</string>
+    <string name="btn_rec">録音を開始する</string>
+    <string name="btn_socket">SOCKETデータを受信する</string>
+    <string name="permission_get_accounts_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="permission_read_phone_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="permission_call_phone_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="permission_camera_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="permission_access_fine_location_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="permission_access_coarse_location_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="permission_read_external_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="permission_white_external_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="permission_recode_audio_hint">この権限がありません。この機能を開けません。権限を開いてください。PERMISSION_GET_ACCOUNTS</string>
+    <string name="todo">TODO</string>
+</resources>

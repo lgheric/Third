@@ -1,77 +1,60 @@
 package com.eric.third;
 
-import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 
-public class MainActivity extends AppCompatActivity {
+import okhttp3.WebSocket;
 
-    private Button btn_control;
-    private boolean isStart = false;
-    private MediaRecorder mr = null;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btn_control = (Button) findViewById(R.id.btn_control);
-        btn_control.setOnClickListener(v -> {
-            if(!isStart){
-                startRecord();
-                btn_control.setText("停止录制");
-                isStart = true;
-            }else{
-                stopRecord();
-                btn_control.setText("开始录制");
-                isStart = false;
-            }
-        });
+
+        Button btn_accept = (Button) findViewById(R.id.btn_accept);
+        btn_accept.setOnClickListener(this);
     }
 
-
-    //开始录制
-    private void startRecord(){
-        if(mr == null){
-            File dir = new File(Environment.getExternalStorageDirectory(),"sounds");
-            if(!dir.exists()){
-                Boolean rs = dir.mkdirs();
-            }
-            File soundFile = new File(dir,System.currentTimeMillis()+".amr");
-            if(!soundFile.exists()){
+    @Override
+    public void onClick(View v) {
+        new Thread() {
+            @Override
+            public void run() {
                 try {
-                    Boolean rs =  soundFile.createNewFile();
+                    acceptServer();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
-            mr = new MediaRecorder();
-            mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
-            mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //设置输出格式
-            mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);   //设置编码格式
-            mr.setOutputFile(soundFile.getAbsolutePath());
-            try {
-                mr.prepare();
-                mr.start();  //开始录制
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
+        }.start();
     }
 
-    //停止录制，资源释放
-    private void stopRecord(){
-        if(mr != null){
-            mr.stop();
-            mr.release();
-            mr = null;
-        }
+    private void acceptServer() throws IOException {
+        //1.创建客户端Socket，指定服务器地址和端口
+        System.out.println("准备连接");
+        Socket socket = new Socket();
+        System.out.println("连接上了");
+
+        //2.获取输出流，向服务器端发送信息
+        OutputStream os = socket.getOutputStream();//字节输出流
+        PrintWriter pw = new PrintWriter(os);//将输出流包装为打印流
+        //获取客户端的IP地址
+        InetAddress address = InetAddress.getLocalHost();
+        String ip = address.getHostAddress();
+        pw.write("客户端：~" + ip + "~ 接入服务器！！");
+        System.out.println("客户端：~" + ip + "~ 接入服务器！！");
+        pw.flush();
+        socket.shutdownOutput();//关闭输出流
+        socket.close();
     }
 }
